@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SQLReaper — Scan Report</title>
+<style>
+  body { background: #0d0d0d; color: #00ff41; font-family: monospace; margin: 0; padding: 20px; }
+  h1 { color: #00ff41; text-align: center; font-size: 2em; letter-spacing: 4px; }
+  .subtitle { text-align: center; color: #888; margin-bottom: 30px; }
+  .card { background: #1a1a1a; border: 1px solid #00ff41; border-radius: 6px; padding: 16px; margin-bottom: 20px; }
+  .stats { display: flex; gap: 20px; flex-wrap: wrap; }
+  .stat { flex: 1; text-align: center; padding: 12px; border: 1px solid #333; border-radius: 4px; }
+  .stat .num { font-size: 2em; font-weight: bold; }
+  .ok   { color: #00ff41; }
+  .fail { color: #ff4444; }
+  .skip { color: #ffcc00; }
+  .vuln { color: #ff4444; font-weight: bold; }
+  table { width: 100%; border-collapse: collapse; }
+  th { background: #222; color: #00ff41; padding: 8px; text-align: left; border-bottom: 2px solid #00ff41; }
+  td { padding: 8px; border-bottom: 1px solid #222; }
+  tr:hover { background: #1a1a1a; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 0.8em; font-weight: bold; }
+  .badge-RECON  { background: #003333; color: #00cccc; }
+  .badge-INJECT { background: #330000; color: #ff4444; }
+  .badge-DUMP   { background: #333300; color: #ffcc00; }
+  .badge-BYPASS { background: #003300; color: #00ff41; }
+  .badge-CRAWL  { background: #330033; color: #cc44cc; }
+  .badge-OS     { background: #222; color: #ffffff; }
+  .badge-ok   { background: #003300; color: #00ff41; }
+  .badge-fail { background: #330000; color: #ff4444; }
+  .badge-skip { background: #333300; color: #ffcc00; }
+  .badge-vulnerable { background: #550000; color: #ff4444; }
+  pre { background: #111; padding: 12px; overflow-x: auto; font-size: 0.75em; color: #aaa; border: 1px solid #333; }
+  details summary { cursor: pointer; color: #00ff41; }
+</style>
+</head>
+<body>
+<h1>☠ SQLREAPER ☠</h1>
+<p class="subtitle">Automated SQL Injection — Precision. Speed. Depth.</p>
+
+<div class="card">
+  <strong>Target:</strong> {{ target }}<br>
+  <strong>Scan Date:</strong> {{ timestamp }}
+</div>
+
+<div class="card">
+  <h2>Summary</h2>
+  <div class="stats">
+    <div class="stat"><div class="num">{{ total }}</div>Total</div>
+    <div class="stat ok"><div class="num">{{ completed }}</div>Completed</div>
+    <div class="stat skip"><div class="num">{{ skipped }}</div>Skipped</div>
+    <div class="stat fail"><div class="num">{{ failed }}</div>Failed</div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Findings</h2>
+  <table>
+    <tr><th>Category</th><th>Values</th></tr>
+    <tr><td>Vulnerable Params</td><td>{{ findings.vulnerable_params | join(', ') or 'None detected' }}</td></tr>
+    <tr><td>Databases</td><td>{{ findings.databases | join(', ') or 'None detected' }}</td></tr>
+    <tr><td>Tables</td><td>{{ findings.tables | join(', ') or 'None detected' }}</td></tr>
+    <tr><td>Users</td><td>{{ findings.users | join(', ') or 'None detected' }}</td></tr>
+    <tr><td>Password Hashes</td><td>{{ findings.password_hashes | join(', ') or 'None detected' }}</td></tr>
+    <tr><td>Files Read</td><td>{{ findings.files_read | join(', ') or 'None detected' }}</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h2>Module Results</h2>
+  <table>
+    <tr><th>#</th><th>Tag</th><th>Module</th><th>Outcome</th><th>Duration</th></tr>
+    {% for r in results %}
+    <tr>
+      <td>{{ r.id }}</td>
+      <td><span class="badge badge-{{ r.tag }}">{{ r.tag }}</span></td>
+      <td>{{ r.label }}</td>
+      <td><span class="badge badge-{{ r.outcome }}">{{ r.outcome }}</span></td>
+      <td>{{ r.duration_seconds }}s</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+
+<div class="card">
+  <details>
+    <summary>▶ Raw Log Output (click to expand)</summary>
+    <pre>{{ raw_log }}</pre>
+  </details>
+</div>
+
+</body>
+</html>
