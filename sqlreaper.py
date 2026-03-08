@@ -47,7 +47,7 @@ def build_parser() -> argparse.ArgumentParser:
     """
     parser = argparse.ArgumentParser(
         prog="sqlreaper",
-        description="SQLReaper — Automated SQL Injection: Precision. Speed. Depth.",
+        description="SQLReaper — Automated SQL Injection   powered by Pr0f3550r1",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("-u", "--url", help="Target URL (required unless --resume)")
