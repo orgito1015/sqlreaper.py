@@ -1,0 +1,30 @@
+profiles:
+  quick:
+    level: 1
+    risk: 1
+    modules: [recon, injection]
+    threads: 4
+    delay: 0
+
+  full:
+    level: 5
+    risk: 3
+    modules: all
+    threads: 8
+    delay: 0
+
+  stealth:
+    level: 2
+    risk: 1
+    modules: [recon, injection, bypass]
+    tamper: "space2comment,randomcase"
+    delay: 2
+    threads: 1
+
+  waf:
+    level: 3
+    risk: 2
+    modules: [injection, bypass]
+    tamper: "space2comment,randomcase,between,charunicodeescape"
+    threads: 2
+    delay: 1
